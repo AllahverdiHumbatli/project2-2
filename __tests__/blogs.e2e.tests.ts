@@ -1,8 +1,8 @@
 import  request from 'supertest';
 import {app} from "../src/app";
 import {SETTINGS} from "../src/settings";
-import {client} from "../src/db/mongo-db";
-import {blogsService} from "../src/domain/blogs-service";
+import {client} from "../src/common/db/mongo-db";
+import {blogsService} from "../src/features/blogs/domain/blogs-service";
 let blog
 describe('/videos', () => {
 

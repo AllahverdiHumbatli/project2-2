@@ -1,10 +1,10 @@
 import {Router} from "express";
-import {getCommentById} from "../features/comments/contollers/getCommentById";
-import {authMiddleware} from "../global-middlewares/authMiddleWare";
-import {contentValidatorForComment} from "../features/comments/middlewares/contentValidator";
-import {inputCheckErrorsMiddleware} from "../global-middlewares/globalMiddleWare";
-import {uptadeCommentById} from "../features/comments/contollers/putByIdContoller";
-import {deleteCommentById} from "../features/comments/contollers/deleteCommentById";
+import {getCommentById} from "../features/comments/api/contollers/getCommentById";
+import {authMiddleware} from "../common/global-middlewares/authMiddleWare";
+import {contentValidatorForComment} from "../features/comments/api/middlewares/contentValidator";
+import {inputCheckErrorsMiddleware} from "../common/global-middlewares/globalMiddleWare";
+import {uptadeCommentById} from "../features/comments/api/contollers/putByIdContoller";
+import {deleteCommentById} from "../features/comments/api/contollers/deleteCommentById";
 
 export const feedbacksRouter = Router()
 
