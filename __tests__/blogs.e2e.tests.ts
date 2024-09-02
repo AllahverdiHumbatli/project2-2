@@ -1,19 +1,23 @@
-import  request from 'supertest';
-import {app} from "../src/app";
-import {SETTINGS} from "../src/settings";
-import {client} from "../src/common/db/mongo-db";
-import {blogsService} from "../src/features/blogs/domain/blogs-service";
+import request from 'supertest';
+import {db} from "../src/common/db/mongo-db";
+import {MongoMemoryServer} from "mongodb-memory-server";
+import {initApp} from "../src/app";
+import {Express} from "express";
+
+let app: Express
 let blog
+
 describe('/videos', () => {
-
-
     beforeAll(async () => {
-        await client.connect()
+        app = initApp()
+        const mongoServer = await MongoMemoryServer.create()
+        await db.run(mongoServer.getUri())
         await request(app).delete('/testing/all-data').expect(204)
     })
 
     afterAll(async () => {
-        await client.close()
+        await db.drop()
+        await db.stop()
     })
     const newBlogForCreate = {
         name: 'alik',

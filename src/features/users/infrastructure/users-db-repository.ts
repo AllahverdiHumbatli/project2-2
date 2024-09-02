@@ -15,5 +15,22 @@ export const usersDbRepository = {
     },
     async findByLoginOrEmail(loginOrEmail: string):Promise<WithId<UserDBType> | null>{
         return await db.getCollections().userCollection.findOne({$or: [{login: loginOrEmail}, {email: loginOrEmail}]})
+    },
+    async findByEmailConfirmationCode(code: string):Promise<WithId<UserDBType> | null>{
+        return await db.getCollections().userCollection.findOne({"emailConfirmation.confirmationCode": code});
+    },
+    async updateEmailConfirmationFlag(code:string):Promise<boolean> {
+        const res = await db.getCollections().userCollection.updateOne({"emailConfirmation.confirmationCode": code}, {$set: {'emailConfirmation.isConfirmed': true}});
+        if(res.matchedCount === 1){
+        return true
     }
+    return false
+    },
+    async findUserById(userId: string):Promise<WithId<UserDBType> | null>{
+       return  await db.getCollections().userCollection.findOne({_id: new ObjectId(userId)})
+    },
+    async updateConfirmationCodeByEmail(email: string, newConfirmationCode: string){
+        await db.getCollections().userCollection.updateOne({email}, {$set: {'emailConfirmation.confirmationCode': newConfirmationCode}});
+    }
+
 }

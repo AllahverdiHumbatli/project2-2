@@ -1,10 +1,13 @@
 import {db} from "../../../common/db/mongo-db";
 import { ObjectId } from 'mongodb';
+import {usersDbRepository} from "../../users/infrastructure/users-db-repository";
+import {UserDBType} from "../../../common/types/DBtypes";
+import {WithId } from 'mongodb'
 export const confirmationFlagCheck = {
     async isConfirmed(userId: string): Promise<boolean | null> {
-        const userDBdata = await db.getCollections().userCollection.findOne({_id: new ObjectId(userId)})
-        if(userDBdata) {
-            if(userDBdata.emailConfirmation.isConfirmed === true){
+        const user: WithId<UserDBType> | null = await usersDbRepository.findUserById(userId)
+        if(user) {
+            if(user.emailConfirmation.isConfirmed === true){
                 return true
             }
             return false

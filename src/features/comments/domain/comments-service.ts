@@ -9,7 +9,10 @@ export enum StatusCode {
     NotFound = 1,
     Forbidden = 2,
     Allowed = 3,
-    emailNotSent = 15
+    emailNotSent = 4,
+    userAlreadyConfirmed = 5,
+    noContent = 6,
+    emailNotExist=7
 }
 export type Result<T> = {
     data: T | null,

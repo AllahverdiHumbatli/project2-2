@@ -13,7 +13,7 @@ import {authService} from "../../userAuthorization/domain/auth-service";
 
 
  export const usersService = {
-    async createUser(login: string, password: string, email: string, isConfirmed: boolean):Promise<string|ValidationErrorForLoginEmail> {
+    async createUser({login, password, email, isConfirmed}:{login:string, password:string, email:string, isConfirmed:boolean}):Promise<string|ValidationErrorForLoginEmail> {
 
          const isUnique:string|ValidationErrorForLoginEmail = await isDataUnique(login, email);
          if(isUnique !== "it's unique") return isUnique //RETURN ARRAY
