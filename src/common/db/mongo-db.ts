@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import {SETTINGS} from "../../settings";
 import {MongoClient, Collection, Db} from "mongodb";
-import {BlogDBType, PostDBType, UserDBType} from "../types/DBtypes";
+import {BlogDBType, ExpiredRefreshTokens, PostDBType, UserDBType} from "../types/DBtypes";
 import {FeedBackDBType} from "../types/DBtypes";
 
 
@@ -75,7 +75,8 @@ export const db = {
             blogCollection: this.getDbName().collection<BlogDBType>(SETTINGS.BLOG_COLLECTION_NAME),
             postCollection: this.getDbName().collection<PostDBType>(SETTINGS.POST_COLLECTION_NAME),
             userCollection: this.getDbName().collection<UserDBType>(SETTINGS.USER_COLLECTION_NAME),
-            feedBackCollection: this.getDbName().collection<FeedBackDBType>(SETTINGS.FEEDBACK_COLLECTION_NAME)
+            feedBackCollection: this.getDbName().collection<FeedBackDBType>(SETTINGS.FEEDBACK_COLLECTION_NAME),
+            expiredRefreshTokenCollection: this.getDbName().collection<ExpiredRefreshTokens>(SETTINGS.EXPIRED_REFRESH_TOKEN_NAME)
 
             //...all collections
         }

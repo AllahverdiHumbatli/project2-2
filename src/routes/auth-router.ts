@@ -12,10 +12,15 @@ import {
     confirmationRegistration
 } from "../features/userAuthorization/api/contollers/confirmationRegistration";
 import {emailResending} from "../features/userAuthorization/api/contollers/emailResending";
+import {refreshTokens} from "../features/userAuthorization/api/contollers/refresh-token";
+import {revokeToken} from "../features/userAuthorization/api/contollers/revokeToken";
 
 export const authRouter = Router()
 
 authRouter.post('/login', checkLoginAndGiveToken)
+authRouter.post('/refresh-token', refreshTokens)
+authRouter.post('/logout', revokeToken )
+
 authRouter.get('/me',  authMiddleware, getCurrentUserData)
 authRouter.post('/registration', loginValidator, passwordValidator, emailValidator, inputCheckErrorsMiddleware, registrationUser )
 authRouter.post('/registration-confirmation', confirmationRegistration)

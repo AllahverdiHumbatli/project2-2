@@ -6,6 +6,7 @@ import {UserViewModel, ValidationErrorForLoginEmail} from "../view-models/UserVi
 
 export const postUser = async (req: Request, res: Response) => {
     const isConfirmed = true
+    console.log(req.body.email)
     const newUserId:string|ValidationErrorForLoginEmail = await usersService.createUser({
         login:req.body.login,
         password:req.body.password,

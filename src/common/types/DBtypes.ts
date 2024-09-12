@@ -39,3 +39,6 @@ export type FeedBackDBType = {
     },
     createdAt: string
 }
+export type ExpiredRefreshTokens = {
+    refreshToken: string
+}

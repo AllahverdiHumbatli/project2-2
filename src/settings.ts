@@ -14,5 +14,6 @@ export const SETTINGS = {
     POST_COLLECTION_NAME: 'postCollection',
     USER_COLLECTION_NAME: 'userCollection',
     FEEDBACK_COLLECTION_NAME: 'feedBackCollection',
+    EXPIRED_REFRESH_TOKEN_NAME: 'expiredRefreshTokenCollection'
 
 }

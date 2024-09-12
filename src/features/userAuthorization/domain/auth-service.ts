@@ -14,6 +14,12 @@ import {Result} from "../../comments/domain/comments-service";
 export const authService = {
     async registerUser(login: string, password: string, email: string, isConfirmed: boolean): Promise<any> {
         return await usersService.createUser({login, password, email, isConfirmed})
+        //add emailConfirm
+        //send email
+    },
+    async createUserByAdmin(login: string, password: string, email: string, isConfirmed: boolean): Promise<any> {
+        return await usersService.createUser({login, password, email, isConfirmed})
+        //send sms for admin
     },
     async emailResending(email:string):Promise<Result<null|{ errorsMessages:[{ message: string, field: string} ]}>> {
         const user = await usersDbRepository.findByLoginOrEmail(email)

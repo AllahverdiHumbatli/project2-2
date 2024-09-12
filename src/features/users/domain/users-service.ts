@@ -37,9 +37,8 @@ import {authService} from "../../userAuthorization/domain/auth-service";
         }
 
         const userId: string = await usersDbRepository.createUser(newUser)
-        const isConfirmedInDB = await confirmationFlagCheck.isConfirmed(userId)
 
-        if(isConfirmedInDB === true){
+        if(isConfirmed){
             return userId
         }
 

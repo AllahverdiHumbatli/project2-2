@@ -17,7 +17,6 @@ export const helper = (query: {[key: string]: string| undefined}):UsersQueryView
 
 export const getUsers = async (req: Request, res: Response) => {
     const sanitizedQuery:UsersQueryViewModel = helper(req.query as {[key: string]: string| undefined})
-    console.log("helper", sanitizedQuery)
     const allUsers = await usersQueryRepositories.getUsers(sanitizedQuery)
     res.status(200).send(allUsers)
     return

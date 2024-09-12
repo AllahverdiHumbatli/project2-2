@@ -9,10 +9,12 @@ import {feedbacksRouter} from "./routes/feedbacks-router";
 import {authMiddleware} from "./common/global-middlewares/authMiddleWare";
 import {getCurrentUserData} from "./features/users/api/contollers/getUserData";
 import {authRouter} from "./routes/auth-router";
+import cookieParser from 'cookie-parser';
 
 export const initApp = () => {
     const app = express() // создать приложение
     app.use(express.json()) // создание свойств-объектов body и query во всех реквестах
+    app.use(cookieParser());
     app.use(cors()) // разрешить любым фронтам делать запросы на наш бэк
 
     app.delete("/testing/all-data", deleteAlldata)
@@ -21,6 +23,7 @@ export const initApp = () => {
     app.use('/users', usersRouter)
     app.use('/comments', feedbacksRouter)
     app.use('/auth', authRouter)
+
     return app
 }
 
