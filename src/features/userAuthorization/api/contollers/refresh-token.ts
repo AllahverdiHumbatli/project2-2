@@ -7,28 +7,35 @@ import {ExpiredRefreshTokens} from "../../../../common/types/DBtypes";
 
 export const refreshTokens  = async (req: Request, res: Response) => {
 
-    const refreshToken = req.cookies['refreshToken'];
+    const usedRefreshToken = req.cookies['refreshToken'];
 
-    if (!refreshToken) {
+    if (!usedRefreshToken) {
         return res.sendStatus(401);
     }
-    const isExpaired = await jwtService.verifyToken(refreshToken)
+    const isExpaired = await jwtService.verifyToken(usedRefreshToken)
     if(!isExpaired) {
         return res.sendStatus(401);
     }
-    const isTokenValid = await db.getCollections().expiredRefreshTokenCollection.findOne({refreshToken: refreshToken})
-    if(isTokenValid) {
-        return res.sendStatus(401)
+    const usedTokenPayload = await jwtService.getTokenPayload(usedRefreshToken)
+    const userSession =
+        await db.getCollections()
+            .usersSessionsCollection
+            .findOne({"user_id": usedTokenPayload?.userId, "iat": usedTokenPayload?.iat})
+    if(!userSession) {
+        return res.sendStatus(401);
     }
-    const result = await jwtService.createNewTokensByRefreshToken(refreshToken);
+
+    const result = await jwtService.createNewTokensByRefreshToken(usedRefreshToken);
     if(result){
-        const {accessToken2, refreshToken2} = result
+        const {accessToken, refreshToken} = result
 
-        const tokenToInsert: ExpiredRefreshTokens = {refreshToken};
-        await db.getCollections().expiredRefreshTokenCollection.insertOne(tokenToInsert)
+        const newTokenPayload = await jwtService.getTokenPayload(refreshToken)
 
-        return res.cookie("refreshToken", refreshToken2, {httpOnly: true, secure: true}).status(200).send({
-            "accessToken": accessToken2
+        await db.getCollections().usersSessionsCollection.updateOne({
+            "device_id": newTokenPayload!.deviceId}, {$set: {"iat" : newTokenPayload!.iat}
+        });
+        return res.cookie("refreshToken", refreshToken, {httpOnly: true, secure: true}).status(200).send({
+            "accessToken": accessToken
         });
     }
     return res.sendStatus(401);

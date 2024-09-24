@@ -10,6 +10,7 @@ import {authMiddleware} from "./common/global-middlewares/authMiddleWare";
 import {getCurrentUserData} from "./features/users/api/contollers/getUserData";
 import {authRouter} from "./routes/auth-router";
 import cookieParser from 'cookie-parser';
+import {securityRouter} from "./routes/security-router";
 
 export const initApp = () => {
     const app = express() // создать приложение
@@ -23,6 +24,7 @@ export const initApp = () => {
     app.use('/users', usersRouter)
     app.use('/comments', feedbacksRouter)
     app.use('/auth', authRouter)
+    app.use('/security/devices', securityRouter )
 
     return app
 }

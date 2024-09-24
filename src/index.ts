@@ -6,7 +6,7 @@ import {initApp} from "./app";
 
 const startApp = async () => {
     const app = initApp()
-
+    app.set('trust proxy', true);
     await db.run(SETTINGS.MONGO_URL)
     console.log(SETTINGS.BLOG_COLLECTION_NAME)
     app.listen(SETTINGS.PORT, () => {

@@ -5,6 +5,7 @@ import {jwtService} from "../../../../common/application/jwt-service";
 import {UserDBType} from "../../../../common/types/DBtypes";
 import {WithId } from 'mongodb'
 import jwt from "jsonwebtoken";
+import {authService} from "../../domain/auth-service";
 
 export const checkLoginAndGiveToken = async (req: Request, res: Response) => {
 
@@ -28,15 +29,15 @@ export const checkLoginAndGiveToken = async (req: Request, res: Response) => {
             ]
         });
     }
-    console.log("loginOrEmail", req.body.loginOrEmail);
+
     const user:WithId<UserDBType> | null = await usersService.checkCredentials(req.body.loginOrEmail, req.body.password);
 
     if(user) {
-
-        const {accessToken2, refreshToken2} = await jwtService.createJWT(user)
-
-        return res.cookie("refreshToken", refreshToken2, {httpOnly: true, secure: true}).status(200).send({
-            "accessToken": accessToken2
+        const ip  = req.ip || "127.0.0.1";
+        const userAgent = req.headers['user-agent']|| 'Unknown User-Agent';
+        const {accessToken, refreshToken} = await authService.createSession(user, ip, userAgent )
+        return res.cookie("refreshToken", refreshToken, {httpOnly: true, secure: true}).status(200).send({
+            accessToken
         });
     }
 

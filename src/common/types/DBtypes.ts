@@ -42,3 +42,17 @@ export type FeedBackDBType = {
 export type ExpiredRefreshTokens = {
     refreshToken: string
 }
+export type SessionDBType = {
+    user_id: string,
+    device_id: string,
+    iat: number,
+    device_name: string,
+    ip: string,
+    exp: number
+
+}
+export type rateLimits = {
+    ip: string,
+    url: string,
+    date: number
+}

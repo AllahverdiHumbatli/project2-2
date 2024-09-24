@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import {SETTINGS} from "../../settings";
 import {MongoClient, Collection, Db} from "mongodb";
-import {BlogDBType, ExpiredRefreshTokens, PostDBType, UserDBType} from "../types/DBtypes";
+import {BlogDBType, ExpiredRefreshTokens, PostDBType, rateLimits, SessionDBType, UserDBType} from "../types/DBtypes";
 import {FeedBackDBType} from "../types/DBtypes";
 
 
@@ -76,7 +76,9 @@ export const db = {
             postCollection: this.getDbName().collection<PostDBType>(SETTINGS.POST_COLLECTION_NAME),
             userCollection: this.getDbName().collection<UserDBType>(SETTINGS.USER_COLLECTION_NAME),
             feedBackCollection: this.getDbName().collection<FeedBackDBType>(SETTINGS.FEEDBACK_COLLECTION_NAME),
-            expiredRefreshTokenCollection: this.getDbName().collection<ExpiredRefreshTokens>(SETTINGS.EXPIRED_REFRESH_TOKEN_NAME)
+            expiredRefreshTokenCollection: this.getDbName().collection<ExpiredRefreshTokens>(SETTINGS.EXPIRED_REFRESH_TOKEN_NAME),
+            usersSessionsCollection: this.getDbName().collection<SessionDBType>(SETTINGS.USERS_SESSIONS_NAME),
+            rateLimitsCollection: this.getDbName().collection<rateLimits>(SETTINGS.RATE_LIMIT_NAME)
 
             //...all collections
         }

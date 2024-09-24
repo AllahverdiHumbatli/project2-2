@@ -1,4 +1,5 @@
 import {config} from 'dotenv'
+import {rateLimits} from "./common/types/DBtypes";
 config() // добавление переменных из файла .env в process.env
 
 export const SETTINGS = {
@@ -14,6 +15,8 @@ export const SETTINGS = {
     POST_COLLECTION_NAME: 'postCollection',
     USER_COLLECTION_NAME: 'userCollection',
     FEEDBACK_COLLECTION_NAME: 'feedBackCollection',
-    EXPIRED_REFRESH_TOKEN_NAME: 'expiredRefreshTokenCollection'
+    EXPIRED_REFRESH_TOKEN_NAME: 'expiredRefreshTokenCollection',
+    USERS_SESSIONS_NAME: 'sessionsCollection',
+    RATE_LIMIT_NAME: 'rateLimitCollection',
 
 }

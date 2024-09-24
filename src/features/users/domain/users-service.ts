@@ -42,10 +42,10 @@ import {authService} from "../../userAuthorization/domain/auth-service";
             return userId
         }
 
-        const sendEmail :boolean = await authService.sendEmail(email, newUser.emailConfirmation.confirmationCode)
-        if(sendEmail){
-            return userId
-        }
+       const res = authService.sendEmail(email, newUser.emailConfirmation.confirmationCode)
+
+        res.catch((e) => { console.log(e) })
+
         return userId
 
 
