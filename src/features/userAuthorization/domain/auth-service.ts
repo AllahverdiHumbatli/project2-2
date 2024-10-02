@@ -81,7 +81,7 @@ export const authService = {
         //     exp: number
 
         await db.getCollections().usersSessionsCollection.insertOne(session)
-            //to do
+            //ToDo
             // how to set sesion into DB +
         // More than 5 attempts from one IP-address during 10 seconds   some auth endpoints
         //delete validation for login from loginController
@@ -91,21 +91,24 @@ export const authService = {
         return {accessToken, refreshToken}
     },
     async isTokenInvalidByIat(tokenPayload: JwtPayload): Promise<boolean> {
-        const deviceId = tokenPayload!.deviceId
-        const iat = tokenPayload!.iat
-        const isInvalid = await db.getCollections().usersSessionsCollection.findOne({device_id: deviceId, iat: iat})
-        if(isInvalid){
-            return false
-        }
-        return true
+        // const deviceId = tokenPayload!.deviceId
+        // const iat = tokenPayload.iat
+        return  !(await db.getCollections()
+            .usersSessionsCollection
+            .findOne({device_id: tokenPayload.deviceId, iat: tokenPayload.iat}))
+        // if(isInvalid){
+        //     return false
+        // }
+        // return true
     },
     async isDeviceIdExist(deviceId:string): Promise<false|WithId<SessionDBType>> {
 
-        const isExist = await db.getCollections().usersSessionsCollection.findOne({device_id: deviceId})
-        if(isExist){
-            return isExist
-        }
-        return false
+        // const isExist = await db.getCollections().usersSessionsCollection.findOne({device_id: deviceId})
+        // if(isExist){
+        //     return isExist
+        // }
+        // return false
+        return (await db.getCollections().usersSessionsCollection.findOne({device_id: deviceId})) ?? false
     }
 
 }

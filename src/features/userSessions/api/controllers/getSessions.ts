@@ -1,8 +1,9 @@
 import {Request, Response} from "express";
-import {UsersQueryViewModel} from "../view-models/UserViewModels";
-import {usersQueryRepositories} from "../user-query-repository";
-import {helper} from "./getController";
+import {UsersQueryViewModel} from "../../../users/api/view-models/UserViewModels";
+import {usersQueryRepositories} from "../../../users/api/user-query-repository";
+import {helper} from "../../../users/api/contollers/getController";
 import {jwtService} from "../../../../common/application/jwt-service";
+import {sessionsQueryRepo} from "../../infrastructure/sessions-query-repo";
 
 export const getAllSessionsForUser = async (req: Request, res: Response) => {
     const refreshToken = req.cookies['refreshToken'];
@@ -14,7 +15,7 @@ export const getAllSessionsForUser = async (req: Request, res: Response) => {
         return res.sendStatus(401);
     }
     const userId = await jwtService.getUserIdByAccessToken(refreshToken);
-    const result = await usersQueryRepositories.getAllSessionsForUser(userId!)
+    const result = await sessionsQueryRepo.getAllSessionsForUser(userId!)
     res.status(200).send(result)
     return
 }

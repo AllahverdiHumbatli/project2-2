@@ -50,10 +50,7 @@ export const usersQueryRepositories = {
    },
    async getUserById(id: string):Promise<false|UserViewModel> {
       const res :WithId<UserDBType> | null = await db.getCollections().userCollection.findOne({ _id: new ObjectId(id) })
-      if(res){
-         return this.mapToOutOutPut(res)
-      }
-      return false
+      return res ? this.mapToOutOutPut(res) : false
    },
    async getCurrentUser(userId: string): Promise<CurrentUserViewModel> {
       const res:false|UserViewModel = await this.getUserById(userId)

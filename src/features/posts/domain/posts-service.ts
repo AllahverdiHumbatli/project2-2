@@ -26,7 +26,7 @@ export const postsService = {
         return await postRepositories.postPOST(newPost)
     }
     ,
-    //to do use query-repo for return the new created post
+    //ToDo use query-repo for return the new created post
     async postPOSTByBlogId(title: string, shortDescription: string, content: string, blogId: string):Promise<string|false> {
         const isBlogExists = await blogsQueryRepositories.getById(blogId)
         if(isBlogExists){

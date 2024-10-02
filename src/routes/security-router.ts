@@ -1,13 +1,14 @@
 import express, {Router} from "express";
-import {getAllSessionsForUser} from "../features/users/api/contollers/getSessions";
-import {deleteAllSessionsExcludeCurrent} from "../features/users/api/contollers/deleteAllSessionExcludeCurrent";
-import {deleteSessionByDeviceId} from "../features/users/api/contollers/deleteSessionByDeviceId";
+import {getAllSessionsForUser} from "../features/userSessions/api/controllers/getSessions";
+import {deleteAllSessionsExcludeCurrent} from "../features/userSessions/api/controllers/deleteAllSessionExcludeCurrent";
+import {deleteSessionByDeviceId} from "../features/userSessions/api/controllers/deleteSessionByDeviceId";
 import {authMiddleware} from "../common/global-middlewares/authMiddleWare";
+import {authForRefreshToken} from "../common/global-middlewares/authForRefreshToken";
 
 export const securityRouter = Router()
 
-securityRouter.get('/', getAllSessionsForUser )
+securityRouter.get('/',authForRefreshToken, getAllSessionsForUser )
 //deleteAllSessionsExcludeCurrent
-securityRouter.delete('/', deleteAllSessionsExcludeCurrent)
-securityRouter.delete('/:id', authMiddleware, deleteSessionByDeviceId)
+securityRouter.delete('/', authForRefreshToken, deleteAllSessionsExcludeCurrent)
+securityRouter.delete('/:id', authForRefreshToken, deleteSessionByDeviceId)
 // deleteSessionByDeviceId

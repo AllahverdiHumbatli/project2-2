@@ -18,7 +18,7 @@ export const jwtService = {
 
         return {accessToken, refreshToken};
     },
-    async getUserIdByAccessToken(token: string): Promise<string | null> {
+    getUserIdByAccessToken(token: string): string | null {
         try {
             const result = jwt.verify(token, SETTINGS.SECRET_KEY) as TokenPayload;
             return result.userId.toString()
