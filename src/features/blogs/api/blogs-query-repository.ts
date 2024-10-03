@@ -1,6 +1,7 @@
 import { db} from "../../../common/db/mongo-db";
 import {ObjectId, OptionalId} from "mongodb";
 import {BlogsViewModel, BlogViewModel, BlogsQueryViewModel} from "./view-models/blogsViewModels";
+import {BlogModel} from "../../../common/db/mongoose/mongooseSchemas";
 
 
 export const blogsQueryRepositories = {
@@ -17,15 +18,16 @@ export const blogsQueryRepositories = {
 
         try {    // db.
             // собственно запрос в бд (может быть вынесено во вспомогательный метод)
-            const items = await db.getCollections().blogCollection
+            const sortDirection = query.sortDirection === 'asc' ? 1 : -1;
+            const items = await BlogModel
                 .find(filter)
-                .sort(query.sortBy, query.sortDirection) //сюда передаются строки
+                .sort({ [query.sortBy]: sortDirection }) //при интеграции монгуса поменялся тут код учти
                 .skip((query.pageNumber - 1) * query.pageSize)
                 .limit(query.pageSize)
-                .toArray() /*SomePostType[]*/
+                .lean()/*SomePostType[]*/
 
             // подсчёт элементов (может быть вынесено во вспомогательный метод)
-            const totalCount = await db.getCollections().blogCollection.countDocuments(filter)
+            const totalCount = await BlogModel.countDocuments(filter)
 
             // формирование ответа в нужном формате (может быть вынесено во вспомогательный метод)
             return {
@@ -53,7 +55,7 @@ export const blogsQueryRepositories = {
     },
     async getById(id: string) :Promise <BlogViewModel>{
         // return db.blogs.find(blog => blog.id === id)
-        const res = await db.getCollections().blogCollection.findOne({_id: new ObjectId(id)})
+        const res = await BlogModel.findOne({_id: new ObjectId(id)})
         console.log("res from getById " + res)
         if(res){
             return {
