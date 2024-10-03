@@ -1,5 +1,5 @@
-import {db} from "../../../common/db/mongo-db";
-import {ObjectId, OptionalId} from "mongodb";
+
+import {ObjectId} from "mongodb";
 import {BlogDBType} from "../../../common/types/DBtypes";
 import {BlogModel} from "../../../common/db/mongoose/mongooseSchemas";
 
