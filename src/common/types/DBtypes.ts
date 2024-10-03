@@ -29,7 +29,10 @@ export type UserDBType= {
         isConfirmed: boolean
     }
 }
-
+export type CommentatorInfoType = {
+    userId: string,
+    userLogin: string
+}
 export type FeedBackDBType = {
     postID?: string,
     content: string,

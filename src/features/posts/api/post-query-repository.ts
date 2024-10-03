@@ -2,21 +2,21 @@ import {db} from "../../../common/db/mongo-db";
 import {ObjectId, OptionalId} from "mongodb";
 import {PostsViewModel, PostViewModel, PostsQueryViewModel, PostsForBlogViewModel} from "./view-models/postsViewModels";
 import {BlogsQueryViewModel} from "../../blogs/api/view-models/blogsViewModels";
-
-
+import {PostModel} from "../../../common/db/mongoose/mongooseSchemas";
 
 export const postQueryRepository = {
     async getPosts(query: PostsQueryViewModel):Promise<PostsViewModel> {
         try {
+            const sortDirection = query.sortDirection === 'asc' ? 1 : -1;
             // собственно запрос в бд (может быть вынесено во вспомогательный метод)
-            const items = await db.getCollections().postCollection
+            const items = await PostModel
                 .find({})
-                .sort(query.sortBy, query.sortDirection) //сюда передаются строки
+                .sort({ [query.sortBy]: sortDirection }) //при интеграции монгуса поменялся тут код учти
                 .skip((query.pageNumber - 1) * query.pageSize)
                 .limit(query.pageSize)
-                .toArray() as any[] /*SomePostType[]*/
+                .lean() /*SomePostType[]*/
 
-            const totalCount = await db.getCollections().postCollection.countDocuments({})
+            const totalCount = await PostModel.countDocuments({})
             return {
                 pagesCount: Math.ceil(totalCount / query.pageSize),
                 page: query.pageNumber,
@@ -39,7 +39,7 @@ export const postQueryRepository = {
 
     },
     async getPostById(id: string):Promise<PostViewModel> {
-        const res = await db.getCollections().postCollection.findOne({_id: new ObjectId(id)})
+        const res = await PostModel.findOne({_id: new ObjectId(id)})
         console.log("рес из монго", res)
         if (res) {
             return {
@@ -65,15 +65,16 @@ export const postQueryRepository = {
         console.log(filter)
         try {
             // собственно запрос в бд (может быть вынесено во вспомогательный метод)
-            const items = await db.getCollections().postCollection
+            const sortDirection = query.sortDirection === 'asc' ? 1 : -1;
+            const items = await PostModel
                 .find(filter)
-                .sort(query.sortBy, query.sortDirection) //сюда передаются строки
+                .sort({ [query.sortBy]: sortDirection }) //сюда передаются строки
                 .skip((query.pageNumber - 1) * query.pageSize)
                 .limit(query.pageSize)
-                .toArray() as any[] /*SomePostType[]*/
+                .lean() as any[] /*SomePostType[]*/
 
             // подсчёт элементов (может быть вынесено во вспомогательный метод)
-            const totalCount = await db.getCollections().postCollection.countDocuments(filter)
+            const totalCount = await PostModel.countDocuments(filter)
 
             // формирование ответа в нужном формате (может быть вынесено во вспомогательный метод)
             return {
