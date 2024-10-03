@@ -1,6 +1,13 @@
 import mongoose from 'mongoose'
 import { WithId } from 'mongodb'
-import {BlogDBType, CommentatorInfoType, FeedBackDBType, PostDBType} from "../../types/DBtypes";
+import {
+    BlogDBType,
+    CommentatorInfoType,
+    EmailConfirmation,
+    FeedBackDBType,
+    PostDBType,
+    UserDBType
+} from "../../types/DBtypes";
 
 
 export const BlogSchema = new mongoose.Schema<BlogDBType>({
@@ -33,3 +40,20 @@ export const CommentsSchema = new mongoose.Schema<FeedBackDBType>({
     createdAt: { type: String, require: true }
 })
 export const CommentsModel = mongoose.model<FeedBackDBType>('comments', CommentsSchema)
+
+export const EmailConfirmationSchema = new mongoose.Schema<EmailConfirmation>({
+    confirmationCode: { type: String, require: true },
+    expirationDate: { type: Date, require: true },
+    isConfirmed: { type: Boolean, require: true },
+
+
+})
+export const UserSchema = new mongoose.Schema<UserDBType>({
+    login: { type: String, require: true },
+    email: { type: String, require: true },
+    createdAt: { type: String, require: true },
+    passwordHash: { type: String, require: true },
+    emailConfirmation: { type: EmailConfirmationSchema, require: true },
+})
+
+export const UsersModel = mongoose.model<UserDBType>('users', UserSchema)

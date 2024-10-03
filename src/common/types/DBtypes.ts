@@ -18,6 +18,11 @@ export type PostDBType = {
     blogName: string
     createdAt: string
 }
+export type EmailConfirmation = {
+    confirmationCode: string,
+     expirationDate: Date,
+    isConfirmed: boolean
+}
 export type UserDBType= {
     login: string,
     email: string,

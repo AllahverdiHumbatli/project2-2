@@ -15,7 +15,6 @@ export const blogsQueryRepositories = {
             // _id: {$in: [new ObjectId(someStringId), ...]}
             ...search,
         }
-
         try {    // db.
             // собственно запрос в бд (может быть вынесено во вспомогательный метод)
             const sortDirection = query.sortDirection === 'asc' ? 1 : -1;

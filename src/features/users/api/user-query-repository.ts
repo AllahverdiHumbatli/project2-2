@@ -2,6 +2,7 @@ import {db} from "../../../common/db/mongo-db";
 import {ObjectId, WithId } from "mongodb";
 import {UserDBType} from "../../../common/types/DBtypes";
 import {CurrentUserViewModel, UsersQueryViewModel, UsersViewModel, UserViewModel} from "./view-models/UserViewModels";
+import {UsersModel} from "../../../common/db/mongoose/mongooseSchemas";
 export const usersQueryRepositories = {
    mapToOutOutPut(user: WithId<UserDBType>){
       return {
@@ -23,16 +24,17 @@ export const usersQueryRepositories = {
          ...searchEmail,
       }
       console.log("фильтр", filter)
+
       try {
          const sortDirection: 'asc' | 'desc' = query.sortDirection === 'asc' ? 'asc' : 'desc';
 
-         const totalCount = await db.getCollections().userCollection.countDocuments({$or: [searchLogin, searchEmail]})
-         const items = await db.getCollections().userCollection
+         const totalCount = await UsersModel.countDocuments({$or: [searchLogin, searchEmail]})
+         const items = await UsersModel
              .find({$or: [searchLogin, searchEmail]})
-             .sort(query.sortBy, sortDirection) //сюда передаются строки
+             .sort({ [query.sortBy]: sortDirection }) //сюда передаются строки
              .skip((query.pageNumber - 1) * query.pageSize)
              .limit(query.pageSize)
-             .toArray() as any[] /*SomePostType[]*/
+             .lean() /*SomePostType[]*/
 
 
          // формирование ответа в нужном формате (может быть вынесено во вспомогательный метод)
@@ -49,7 +51,7 @@ export const usersQueryRepositories = {
       }
    },
    async getUserById(id: string):Promise<false|UserViewModel> {
-      const res :WithId<UserDBType> | null = await db.getCollections().userCollection.findOne({ _id: new ObjectId(id) })
+      const res :WithId<UserDBType> | null = await UsersModel.findOne({ _id: new ObjectId(id) })
       return res ? this.mapToOutOutPut(res) : false
    },
    async getCurrentUser(userId: string): Promise<CurrentUserViewModel> {
