@@ -30,7 +30,20 @@ dotenv.config()
 //         return false
 //     }
 // }
+import mongoose from 'mongoose'
 
+const dbName = 'home_works'
+const mongoURI = SETTINGS.MONGO_URL || `mongodb://0.0.0.0:27017/${dbName}`
+
+export async function runDb() {
+    try {
+        await mongoose.connect(mongoURI)
+        console.log('it is ok connect to mongoose')
+    } catch (e) {
+        console.log('no connection')
+        await mongoose.disconnect()
+    }
+}
 export const db = {
     client: {} as MongoClient,
 
