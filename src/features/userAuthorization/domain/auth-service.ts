@@ -15,6 +15,7 @@ import {SessionDBType, UserDBType} from "../../../common/types/DBtypes";
 import {jwtService} from "../../../common/application/jwt-service";
 import jwt from "jsonwebtoken";
 import {JwtPayload} from "jwt-decode";
+import {UsersModel, UsersSessionsModel} from "../../../common/db/mongoose/mongooseSchemas";
 // "../domain/comments-service";
 export const authService = {
     async registerUser(login: string, password: string, email: string, isConfirmed: boolean): Promise<any> {
@@ -80,7 +81,7 @@ export const authService = {
         //     ip: string,
         //     exp: number
 
-        await db.getCollections().usersSessionsCollection.insertOne(session)
+        await UsersSessionsModel.insertMany([session])
             //ToDo
             // how to set sesion into DB +
         // More than 5 attempts from one IP-address during 10 seconds   some auth endpoints
@@ -93,8 +94,7 @@ export const authService = {
     async isTokenInvalidByIat(tokenPayload: JwtPayload): Promise<boolean> {
         // const deviceId = tokenPayload!.deviceId
         // const iat = tokenPayload.iat
-        return  !(await db.getCollections()
-            .usersSessionsCollection
+        return  !(await UsersSessionsModel
             .findOne({device_id: tokenPayload.deviceId, iat: tokenPayload.iat}))
         // if(isInvalid){
         //     return false
@@ -108,7 +108,7 @@ export const authService = {
         //     return isExist
         // }
         // return false
-        return (await db.getCollections().usersSessionsCollection.findOne({device_id: deviceId})) ?? false
+        return (await UsersSessionsModel.findOne({device_id: deviceId})) ?? false
     }
 
 }

@@ -3,7 +3,6 @@ import nodemailer from "nodemailer";
 export const emailAdapter = {
     async sendEmail(email: string, code: string): Promise<boolean> {
         if (!email) {
-            console.log('No email address provided');
             return false;
         }
         // Создание транспортера для отправки писем
@@ -26,7 +25,6 @@ export const emailAdapter = {
                <a href='http://localhost:5005/auth/registration-confirmation?code=${code}'>Complete registration</a></p>`
             });
 
-            console.log('Email sent:', info.response);
             return true// Логирование информации об отправке
         } catch (error) {
             console.error('Failed to send email:', error); // Логирование ошибки
