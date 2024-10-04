@@ -2,7 +2,7 @@ import {db} from "../../../common/db/mongo-db";
 import {ObjectId, WithId } from "mongodb";
 import {UserDBType} from "../../../common/types/DBtypes";
 import {CurrentUserViewModel, UsersQueryViewModel, UsersViewModel, UserViewModel} from "./view-models/UserViewModels";
-import {UsersModel} from "../../../common/db/mongoose/mongooseSchemas";
+import {UsersModel, UsersSessionsModel} from "../../../common/db/mongoose/mongooseSchemas";
 export const usersQueryRepositories = {
    mapToOutOutPut(user: WithId<UserDBType>){
       return {
@@ -66,7 +66,7 @@ export const usersQueryRepositories = {
       return null
    },
    async getAllSessionsForUser(userId: string) {
-    const sessionsDBtype =  await db.getCollections().usersSessionsCollection.find({"user_id": userId}).toArray();
+    const sessionsDBtype =  await UsersSessionsModel.find({"user_id": userId}).lean();
       return sessionsDBtype.map(session => ({
          ip: session.ip,
          title: session.device_name,

@@ -5,7 +5,7 @@ import {
     CommentatorInfoType,
     EmailConfirmation,
     FeedBackDBType,
-    PostDBType,
+    PostDBType, SessionDBType,
     UserDBType
 } from "../../types/DBtypes";
 
@@ -57,3 +57,15 @@ export const UserSchema = new mongoose.Schema<UserDBType>({
 })
 
 export const UsersModel = mongoose.model<UserDBType>('users', UserSchema)
+
+export const UserSessionsSchema = new mongoose.Schema<SessionDBType>({
+    user_id: { type: String, require: true },
+    device_id: { type: String, require: true },
+    iat: { type: Number, require: true },
+    device_name: { type: String, require: true },
+    ip: { type: String, require: true },
+    exp: {type: Number, require: true}
+})
+
+export const UsersSessionsModel = mongoose.model<SessionDBType>('sessions', UserSessionsSchema)
+
