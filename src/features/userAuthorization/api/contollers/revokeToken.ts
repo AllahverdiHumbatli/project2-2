@@ -14,14 +14,14 @@ export const revokeToken  = async (req: Request, res: Response) => {
     }
     const isExpaired = await jwtService.verifyToken(refreshToken)
     if(!isExpaired) {
-        console.log('!isExpired at revoke')
+
         return res.sendStatus(401);
     }
 
     const tokenPayload = await jwtService.getTokenPayload(refreshToken)
     const isTokenValidByIat = await authService.isTokenInvalidByIat(tokenPayload!)
     if(isTokenValidByIat) {
-        console.log('isTokenValidByIat at revoke')
+
         return res.sendStatus(401);
     }
 
@@ -30,6 +30,6 @@ export const revokeToken  = async (req: Request, res: Response) => {
     await UsersSessionsModel.deleteOne({
         device_id: tokenPayload!.deviceId, iat: tokenPayload!.iat})
 
-    console.log("padayet v samom konce at revoke ")
+
     return res.sendStatus(204);
 }
