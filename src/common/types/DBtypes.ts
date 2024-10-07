@@ -18,6 +18,10 @@ export type PostDBType = {
     blogName: string
     createdAt: string
 }
+export type  PasswordRecovery = {
+    passwordRecoveryCode: null|string,
+    expirationDate: null|Date,
+}
 export type EmailConfirmation = {
     confirmationCode: string,
      expirationDate: Date,
@@ -28,11 +32,16 @@ export type UserDBType= {
     email: string,
     createdAt: string,
     passwordHash: string,
+    passwordRecovery:{
+        passwordRecoveryCode: null|string,
+        expirationDate: Date|null,
+    }
     emailConfirmation: {    // доп поля необходимые для подтверждения
         confirmationCode: string,
         expirationDate: Date,
         isConfirmed: boolean
-    }
+    },
+
 }
 export type CommentatorInfoType = {
     userId: string,

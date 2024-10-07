@@ -40,6 +40,5 @@ export const checkLoginAndGiveToken = async (req: Request, res: Response) => {
             accessToken
         });
     }
-     console.log("password or login wrong")
     return res.sendStatus(401)
 }

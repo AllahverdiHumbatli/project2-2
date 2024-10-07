@@ -1,8 +1,8 @@
-import {db} from "../../../common/db/mongo-db";
-import {ObjectId} from "mongodb";
+import {randomUUID} from "node:crypto";import {ObjectId} from "mongodb";
 import {UserDBType} from "../../../common/types/DBtypes";
 import {WithId } from 'mongodb'
-import {UsersModel} from "../../../common/db/mongoose/mongooseSchemas";
+import {UsersModel, UsersSessionsModel} from "../../../common/db/mongoose/mongooseSchemas";
+import {add} from "date-fns";
 
 export const usersDbRepository = {
      async createUser(newUser: UserDBType):Promise<string>{
@@ -32,6 +32,36 @@ export const usersDbRepository = {
     },
     async updateConfirmationCodeByEmail(email: string, newConfirmationCode: string){
         await UsersModel.updateOne({email}, {$set: {'emailConfirmation.confirmationCode': newConfirmationCode}});
+    },
+    async setPasswordRecoveryCodeForUser(userId: string, recoveryCode: string){
+         const res = await UsersModel.updateOne({
+             _id: new ObjectId(userId)}, {
+             $set: {
+             'passwordRecovery.passwordRecoveryCode': recoveryCode,
+                 'passwordRecovery.expirationDate': add(new Date(), {
+                     minutes: 1,
+                     seconds: 30
+                 })
+
+             }})
+        if(res.matchedCount === 1){
+            return true
+        }
+        return false
+    },
+
+    async getUserByPasswordRecoveryCode(recoveryCode: string){
+         const user = await UsersModel.findOne({'passwordRecovery.passwordRecoveryCode': recoveryCode})
+         if(!user){
+             return false
+         }
+         return user
+
+    },
+    async setNewPasswordAndSetNullForRecoveryCode(userId: string, newPasswordHash: string){
+        await UsersModel.updateOne({_id: new ObjectId(userId)}, {$set: {'passwordHash': newPasswordHash}});
+        await UsersModel.updateOne({_id: new ObjectId(userId)}, {$set: {'passwordRecovery.passwordRecoveryCode': null}})
+
     }
 
 }

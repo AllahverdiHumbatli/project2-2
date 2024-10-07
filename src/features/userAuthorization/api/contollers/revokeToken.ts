@@ -9,7 +9,6 @@ import {UsersSessionsModel} from "../../../../common/db/mongoose/mongooseSchemas
 export const revokeToken  = async (req: Request, res: Response) => {
     const refreshToken: string = req.cookies['refreshToken'];
     if (!refreshToken) {
-        console.log('!refresh token at revoke')
         return res.sendStatus(401);
     }
     const isExpaired = await jwtService.verifyToken(refreshToken)

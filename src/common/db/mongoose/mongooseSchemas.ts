@@ -4,7 +4,7 @@ import {
     BlogDBType,
     CommentatorInfoType,
     EmailConfirmation,
-    FeedBackDBType,
+    FeedBackDBType, PasswordRecovery,
     PostDBType, SessionDBType,
     UserDBType
 } from "../../types/DBtypes";
@@ -48,11 +48,16 @@ export const EmailConfirmationSchema = new mongoose.Schema<EmailConfirmation>({
 
 
 })
+export const passwordRecoverySchema = new mongoose.Schema<PasswordRecovery>({
+    passwordRecoveryCode: { type: String, require: true, default: null },
+    expirationDate: { type: Date, require: true, default: null },
+})
 export const UserSchema = new mongoose.Schema<UserDBType>({
     login: { type: String, require: true },
     email: { type: String, require: true },
     createdAt: { type: String, require: true },
     passwordHash: { type: String, require: true },
+    passwordRecovery: { type: passwordRecoverySchema, require: true, default: null },
     emailConfirmation: { type: EmailConfirmationSchema, require: true },
 })
 

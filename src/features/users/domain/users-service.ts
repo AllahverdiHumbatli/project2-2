@@ -26,6 +26,10 @@ import {authService} from "../../userAuthorization/domain/auth-service";
             email,
             createdAt: new Date().toISOString(),
             passwordHash,
+            passwordRecovery:{
+                passwordRecoveryCode: null,
+                expirationDate: null
+            },
             emailConfirmation: {    // доп поля необходимые для подтверждения
                 confirmationCode: randomUUID(),
                 expirationDate: add(new Date(), {
