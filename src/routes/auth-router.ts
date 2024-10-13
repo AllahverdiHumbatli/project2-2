@@ -15,12 +15,20 @@ import {emailResending} from "../features/userAuthorization/api/contollers/email
 import {refreshTokens} from "../features/userAuthorization/api/contollers/refresh-token";
 import {revokeToken} from "../features/userAuthorization/api/contollers/revokeToken";
 import {requestLimitMiddleware} from "../common/global-middlewares/rateLimitMiddleWare";
+import {validateEmail} from "../features/userAuthorization/api/middlewares/validatorForEmail";
+import {passwordRecovery} from "../features/userAuthorization/api/contollers/password-recovery";
+
+import {setNewPassword} from "../features/userAuthorization/api/contollers/new-password";
+import {newPasswordValidator} from "../features/userAuthorization/api/middlewares/passwordValidator";
+import {recoveryCodeValidator} from "../features/userAuthorization/api/middlewares/recoveryCodeValidator";
 
 export const authRouter = Router()
 
 authRouter.post('/login', requestLimitMiddleware, checkLoginAndGiveToken)
 authRouter.post('/refresh-token', refreshTokens)
 authRouter.post('/logout', revokeToken )
+authRouter.post('/password-recovery', requestLimitMiddleware, validateEmail, passwordRecovery )
+authRouter.post('/new-password', requestLimitMiddleware,newPasswordValidator, recoveryCodeValidator, inputCheckErrorsMiddleware, setNewPassword )
 
 authRouter.get('/me',  authMiddleware, getCurrentUserData)
 authRouter.post('/registration', requestLimitMiddleware ,loginValidator, passwordValidator, emailValidator, inputCheckErrorsMiddleware, registrationUser )

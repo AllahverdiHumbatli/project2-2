@@ -4,6 +4,7 @@ import {Request, Response} from "express";
 import jwt from "jsonwebtoken";
 import {db} from "../../../../common/db/mongo-db";
 import {ExpiredRefreshTokens} from "../../../../common/types/DBtypes";
+import {UsersSessionsModel} from "../../../../common/db/mongoose/mongooseSchemas";
 
 export const refreshTokens  = async (req: Request, res: Response) => {
 
@@ -18,8 +19,7 @@ export const refreshTokens  = async (req: Request, res: Response) => {
     }
     const usedTokenPayload = await jwtService.getTokenPayload(usedRefreshToken)
     const userSession =
-        await db.getCollections()
-            .usersSessionsCollection
+        await UsersSessionsModel
             .findOne({"user_id": usedTokenPayload?.userId, "iat": usedTokenPayload?.iat})
     if(!userSession) {
         return res.sendStatus(401);
@@ -31,7 +31,7 @@ export const refreshTokens  = async (req: Request, res: Response) => {
 
         const newTokenPayload = await jwtService.getTokenPayload(refreshToken)
 
-        await db.getCollections().usersSessionsCollection.updateOne({
+        await UsersSessionsModel.updateOne({
             "device_id": newTokenPayload!.deviceId}, {$set: {"iat" : newTokenPayload!.iat}
         });
         return res.cookie("refreshToken", refreshToken, {httpOnly: true, secure: true}).status(200).send({

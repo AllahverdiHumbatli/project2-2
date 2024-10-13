@@ -40,6 +40,5 @@ export const checkLoginAndGiveToken = async (req: Request, res: Response) => {
             accessToken
         });
     }
-
     return res.sendStatus(401)
 }

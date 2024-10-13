@@ -4,9 +4,10 @@ import {CommentViewType} from "./view-models/commentViewType";
 import {Result} from "../domain/comments-service";
 import {StatusCode} from "../domain/comments-service";
 import {CommentsQueryViewModel} from "../view-models/commentsViewModels";
+import {CommentsModel} from "../../../common/db/mongoose/mongooseSchemas";
 export const commentsQueryRepositories = {
     async getCommentById(id: string):Promise<Result<CommentViewType>> {
-            const res = await db.getCollections().feedBackCollection.findOne({_id: new ObjectId(id)})
+            const res = await CommentsModel.findOne({_id: new ObjectId(id)})
             if(res){
                 return {
                     data: {  id: res._id.toString(),
@@ -29,15 +30,16 @@ export const commentsQueryRepositories = {
     },
     async getCommentsForPost(sanitizedQuery: CommentsQueryViewModel, postId: string) {
             try {
+                const sortDirection = sanitizedQuery.sortDirection === 'asc' ? 1 : -1;
                 // собственно запрос в бд (может быть вынесено во вспомогательный метод)
-                const items  = await db.getCollections().feedBackCollection
+                const items  = await CommentsModel
                     .find({postID: postId})
-                    .sort(sanitizedQuery.sortBy, sanitizedQuery.sortDirection) //сюда передаются строки
+                    .sort({ [sanitizedQuery.sortBy]: sortDirection }) //сюда передаются строки
                     .skip((sanitizedQuery.pageNumber - 1) * sanitizedQuery.pageSize)
                     .limit(sanitizedQuery.pageSize)
-                    .toArray() as any[] /*SomePostType[]*/
+                    .lean() as any[] /*SomePostType[]*/
 
-                const totalCount = await db.getCollections().feedBackCollection.countDocuments({postID: postId})
+                const totalCount = await CommentsModel.countDocuments({postID: postId})
 
                 return {
                     pagesCount: Math.ceil(totalCount / sanitizedQuery.pageSize),

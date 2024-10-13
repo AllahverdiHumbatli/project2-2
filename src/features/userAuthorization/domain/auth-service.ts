@@ -15,6 +15,7 @@ import {SessionDBType, UserDBType} from "../../../common/types/DBtypes";
 import {jwtService} from "../../../common/application/jwt-service";
 import jwt from "jsonwebtoken";
 import {JwtPayload} from "jwt-decode";
+import {UsersModel, UsersSessionsModel} from "../../../common/db/mongoose/mongooseSchemas";
 // "../domain/comments-service";
 export const authService = {
     async registerUser(login: string, password: string, email: string, isConfirmed: boolean): Promise<any> {
@@ -40,7 +41,7 @@ export const authService = {
 
             const newConfirmationCode = randomUUID()
             await usersDbRepository.updateConfirmationCodeByEmail(email, newConfirmationCode)
-             this.sendEmail(user.email, newConfirmationCode);
+            this.sendEmail(user.email, newConfirmationCode);
 
             return {
                 data: null,
@@ -54,13 +55,62 @@ export const authService = {
 
         }
     ,
+    async sendEmailForRecoveryPassword(email: string){
+        const recoveryCodeForPassword = randomUUID()
+        const user = await usersDbRepository.findByLoginOrEmail(email)
+        if(!user){
+            return {
+                data: { errorsMessages: [{ message: "email doesnt exist", field: "email" } ] },
+                statusCode: StatusCode.emailNotExist
+            }
+        }
+        await usersDbRepository.setPasswordRecoveryCodeForUser(user._id.toString(), recoveryCodeForPassword)
+        this.sendEmailForPasswordRecovery(email, recoveryCodeForPassword)
+        return {
+            data: null,
+            statusCode: StatusCode.noContent
+        }
+
+    },
+    async setNewPassword(newPassword: string, recoveryCodeForPassword: string): Promise<any> {
+          const user = await usersDbRepository.getUserByPasswordRecoveryCode(recoveryCodeForPassword)
+          if(!user){
+              return {
+                  data: { errorsMessages: [{ message: "recovery code doesnt exist", field: "recovery code" } ] },
+                  statusCode: StatusCode.NotFound
+              }
+          }
+          if(user.passwordRecovery.expirationDate! < new Date()){
+            return  {
+                  data: { errorsMessages: [{ message: "recovery code expired", field: "recovery code" } ] },
+                  statusCode: StatusCode.Forbidden
+              }
+          }
+
+        const passwordSalt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(newPassword, passwordSalt);
+
+        await usersDbRepository.setNewPasswordAndSetNullForRecoveryCode(user._id.toString(), passwordHash)
+
+         return {
+            data: null,
+            statusCode: StatusCode.noContent
+        }
+
+
+    },
     async sendEmail(email: string, code: string):Promise<boolean>{
-        console.log("Sending email", email);
         return await emailAdapter.sendEmail(email, code);
+    },
+    async sendEmailForPasswordRecovery(email: string, code: string):Promise<boolean> {
+        return await emailAdapter.sendEmailForRecoveryPassword(email, code);
+
     },
     async confirmUser(code: string):Promise<boolean >{
           return await confirmationCodeAndDateCheck.checkConfirmationCodeAndExperationDate(code)
     },
+
+
     async createSession(user: WithId<UserDBType>, ip: string, userAgent: string): Promise<{accessToken: string, refreshToken: string}> {
         const {accessToken, refreshToken} = await jwtService.createJWT(user)
         const tokenPayload = await jwtService.getTokenPayload(refreshToken)
@@ -80,21 +130,19 @@ export const authService = {
         //     ip: string,
         //     exp: number
 
-        await db.getCollections().usersSessionsCollection.insertOne(session)
+        await UsersSessionsModel.insertMany([session])
             //ToDo
             // how to set sesion into DB +
         // More than 5 attempts from one IP-address during 10 seconds   some auth endpoints
         //delete validation for login from loginController
 
-        console.log(session);
 
         return {accessToken, refreshToken}
     },
     async isTokenInvalidByIat(tokenPayload: JwtPayload): Promise<boolean> {
         // const deviceId = tokenPayload!.deviceId
         // const iat = tokenPayload.iat
-        return  !(await db.getCollections()
-            .usersSessionsCollection
+        return  !(await UsersSessionsModel
             .findOne({device_id: tokenPayload.deviceId, iat: tokenPayload.iat}))
         // if(isInvalid){
         //     return false
@@ -108,7 +156,7 @@ export const authService = {
         //     return isExist
         // }
         // return false
-        return (await db.getCollections().usersSessionsCollection.findOne({device_id: deviceId})) ?? false
+        return (await UsersSessionsModel.findOne({device_id: deviceId})) ?? false
     }
 
 }

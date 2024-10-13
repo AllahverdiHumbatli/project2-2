@@ -11,8 +11,6 @@ export const jwtService = {
     //get only user Id not all user data
     async createJWT(user: WithId<UserDBType>, dId?: string): Promise<{accessToken: string, refreshToken: string}> {
         const uuid: string = uuidv4();
-        console.log("unique", uuid)
-        console.log('deviceId', dId);
         const accessToken = jwt.sign({userId: user._id}, SETTINGS.SECRET_KEY, {expiresIn: '10s'});
         const refreshToken = jwt.sign({userId: user._id, deviceId: dId !== undefined? dId : uuid}, SETTINGS.SECRET_KEY, {expiresIn: '20s'});
 

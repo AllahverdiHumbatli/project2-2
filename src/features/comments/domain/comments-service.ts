@@ -12,7 +12,8 @@ export enum StatusCode {
     emailNotSent = 4,
     userAlreadyConfirmed = 5,
     noContent = 6,
-    emailNotExist=7
+    emailNotExist=7,
+
 }
 export type Result<T> = {
     data: T | null,

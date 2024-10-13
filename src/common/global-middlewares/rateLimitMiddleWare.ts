@@ -19,8 +19,7 @@ export const requestLimitMiddleware = async (
         date: { $gte: Date.now() - 10 * 1000 },
     });
 
-    console.log(req.originalUrl);
-    console.log(count);
+
 
     if (count > 5) {
         res.sendStatus(429);
