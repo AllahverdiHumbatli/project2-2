@@ -1,7 +1,7 @@
 import {postRepositories} from "../infrastructure/post-db-repository";
-import {blogsRepositories} from "../../blogs/infrastructure/blogs-db-repository";
-import {blogsQueryRepositories, } from "../../blogs/api/blogs-query-repository";
+
 import {PostViewModel} from "../api/view-models/postsViewModels";
+import {blogsQueryRepository} from "../../../composition-root/blogsCompositionRoot";
 
 // type Pagination = { pageNumber: number; pageSize: number; sortBy: string; sortDirection: string; }
 // type ParPagination = Partial<Pagination>
@@ -28,7 +28,7 @@ export const postsService = {
     ,
     //ToDo use query-repo for return the new created post
     async postPOSTByBlogId(title: string, shortDescription: string, content: string, blogId: string):Promise<string|false> {
-        const isBlogExists = await blogsQueryRepositories.getById(blogId)
+        const isBlogExists = await blogsQueryRepository.getById(blogId)
         if(isBlogExists){
             const newPost = {
                 title: title,

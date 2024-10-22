@@ -1,5 +1,4 @@
 import {Request, Response} from "express";
-import {blogsService} from "../../../blogs/domain/blogs-service";
 import {usersService} from "../../../users/domain/users-service";
 import {jwtService} from "../../../../common/application/jwt-service";
 import {UserDBType} from "../../../../common/types/DBtypes";

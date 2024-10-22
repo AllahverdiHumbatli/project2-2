@@ -11,3 +11,9 @@ adapters for email and exc +
 notice: this code working for multidevices and refactoring  + with mobile connection from library
 
 test for branch this change works only on mongoose branch
+
+если мердж из монгуса в мастер
+сначала делаешь все коммиты и пушишь в ветке которую хочешь смерджить (mongoose)
+потом ты делаешь пулл в ветку которую в которую хочешь смерджить (master)
+делаешь мердж в ветку (нужно сидеть в той ветке в которую хочешь замержить) (master)
+а потом коммит и пуш ветки в которую ты мерджил (master)

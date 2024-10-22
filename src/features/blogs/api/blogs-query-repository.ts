@@ -4,7 +4,7 @@ import {BlogsViewModel, BlogViewModel, BlogsQueryViewModel} from "./view-models/
 import {BlogModel} from "../../../common/db/mongoose/mongooseSchemas";
 
 
-export const blogsQueryRepositories = {
+export class BlogsQueryRepositories {
     async getBlogs(query: BlogsQueryViewModel): Promise<BlogsViewModel> {
 
         const search = query.searchNameTerm
@@ -51,7 +51,7 @@ export const blogsQueryRepositories = {
 
         //
 
-    },
+    }
     async getById(id: string) :Promise <BlogViewModel>{
         // return db.blogs.find(blog => blog.id === id)
         const res = await BlogModel.findOne({_id: new ObjectId(id)})
@@ -71,5 +71,5 @@ export const blogsQueryRepositories = {
 
 
     }
-
 }
+// export const blogsQueryRepositories = new BlogsQueryRepositories()

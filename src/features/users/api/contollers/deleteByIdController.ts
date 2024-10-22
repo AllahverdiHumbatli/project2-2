@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {blogsService} from "../../../blogs/domain/blogs-service";
+
 import {usersService} from "../../domain/users-service";
 
 export const deleteUserById = async (req: Request, res: Response) => {
