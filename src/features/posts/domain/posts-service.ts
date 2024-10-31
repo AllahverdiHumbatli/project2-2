@@ -1,4 +1,4 @@
-import {postRepositories} from "../infrastructure/post-db-repository";
+import {PostDbRepository} from "../infrastructure/post-db-repository";
 
 import {PostViewModel} from "../api/view-models/postsViewModels";
 import {blogsQueryRepository} from "../../../composition-root/blogsCompositionRoot";
@@ -10,10 +10,12 @@ import {blogsQueryRepository} from "../../../composition-root/blogsCompositionRo
 // type b = {b : number}
 // type c = a & b
 
-
-export const postsService = {
-
+export class PostsService {
     // todo generics =  dynamic typization
+    postRepositories: PostDbRepository
+    constructor() {
+        this.postRepositories = new PostDbRepository()
+    }
     async postPOST(title: string, shortDescription: string, content: string, blogId: string):Promise<string> {
         const newPost = {
             title: title,
@@ -23,9 +25,9 @@ export const postsService = {
             blogName: Math.random().toString(36).substring(2, 9),
             createdAt: new Date().toISOString(),
         }
-        return await postRepositories.postPOST(newPost)
+        return await this.postRepositories.postPOST(newPost)
     }
-    ,
+
     //ToDo use query-repo for return the new created post
     async postPOSTByBlogId(title: string, shortDescription: string, content: string, blogId: string):Promise<string|false> {
         const isBlogExists = await blogsQueryRepository.getById(blogId)
@@ -38,16 +40,56 @@ export const postsService = {
                 blogName: Math.random().toString(36).substring(2, 9),
                 createdAt: new Date().toISOString(),
             }
-            return await postRepositories.postPOST(newPost)
+            return await this.postRepositories.postPOST(newPost)
         }
         return false
 
-    },
+    }
     async uptadePostById(id: string, title: string, shortDescription: string, content: string, blogId: string):Promise<boolean> {
-       return postRepositories.uptadePostById(id, title, shortDescription, content, blogId)
-    },
+        return this.postRepositories.uptadePostById(id, title, shortDescription, content, blogId)
+    }
     async deletePostById(id: string):Promise<boolean> {
-        return postRepositories.deletePostById(id)
-    },
+        return this.postRepositories.deletePostById(id)
+    }
 }
+/////////////////////////////////////////////////////
+// export const postsService = {
+//
+//     // todo generics =  dynamic typization
+//     async postPOST(title: string, shortDescription: string, content: string, blogId: string):Promise<string> {
+//         const newPost = {
+//             title: title,
+//             shortDescription: shortDescription,
+//             content: content,
+//             blogId: blogId,
+//             blogName: Math.random().toString(36).substring(2, 9),
+//             createdAt: new Date().toISOString(),
+//         }
+//         return await postRepositories.postPOST(newPost)
+//     }
+//     ,
+//     //ToDo use query-repo for return the new created post
+//     async postPOSTByBlogId(title: string, shortDescription: string, content: string, blogId: string):Promise<string|false> {
+//         const isBlogExists = await blogsQueryRepository.getById(blogId)
+//         if(isBlogExists){
+//             const newPost = {
+//                 title: title,
+//                 shortDescription: shortDescription,
+//                 content: content,
+//                 blogId: blogId,
+//                 blogName: Math.random().toString(36).substring(2, 9),
+//                 createdAt: new Date().toISOString(),
+//             }
+//             return await postRepositories.postPOST(newPost)
+//         }
+//         return false
+//
+//     },
+//     async uptadePostById(id: string, title: string, shortDescription: string, content: string, blogId: string):Promise<boolean> {
+//        return postRepositories.uptadePostById(id, title, shortDescription, content, blogId)
+//     },
+//     async deletePostById(id: string):Promise<boolean> {
+//         return postRepositories.deletePostById(id)
+//     },
+// }
 

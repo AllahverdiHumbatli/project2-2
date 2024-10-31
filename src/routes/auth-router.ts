@@ -21,16 +21,17 @@ import {passwordRecovery} from "../features/userAuthorization/api/contollers/pas
 import {setNewPassword} from "../features/userAuthorization/api/contollers/new-password";
 import {newPasswordValidator} from "../features/userAuthorization/api/middlewares/passwordValidator";
 import {recoveryCodeValidator} from "../features/userAuthorization/api/middlewares/recoveryCodeValidator";
+import {authorizationController} from "../features/userAuthorization/api/contollers/authorizationContoller";
 
 export const authRouter = Router()
 
-authRouter.post('/login', requestLimitMiddleware, checkLoginAndGiveToken)
-authRouter.post('/refresh-token', refreshTokens)
-authRouter.post('/logout', revokeToken )
-authRouter.post('/password-recovery', requestLimitMiddleware, validateEmail, passwordRecovery )
-authRouter.post('/new-password', requestLimitMiddleware,newPasswordValidator, recoveryCodeValidator, inputCheckErrorsMiddleware, setNewPassword )
+authRouter.post('/login', requestLimitMiddleware, authorizationController.checkLoginAndGiveToken.bind(authorizationController))
+authRouter.post('/refresh-token', authorizationController.refreshTokens.bind(authorizationController))
+authRouter.post('/logout', authorizationController.revokeToken.bind(authorizationController) )
+authRouter.post('/password-recovery', requestLimitMiddleware, validateEmail, authorizationController.passwordRecovery.bind(authorizationController) )
+authRouter.post('/new-password', requestLimitMiddleware,newPasswordValidator, recoveryCodeValidator, inputCheckErrorsMiddleware, authorizationController.setNewPassword.bind(authorizationController) )
 
-authRouter.get('/me',  authMiddleware, getCurrentUserData)
-authRouter.post('/registration', requestLimitMiddleware ,loginValidator, passwordValidator, emailValidator, inputCheckErrorsMiddleware, registrationUser )
-authRouter.post('/registration-confirmation', requestLimitMiddleware, confirmationRegistration)
-authRouter.post('/registration-email-resending', requestLimitMiddleware,emailValidator, inputCheckErrorsMiddleware, emailResending )
+authRouter.get('/me',  authMiddleware, authorizationController.getCurrentUserData.bind(authorizationController))
+authRouter.post('/registration', requestLimitMiddleware ,loginValidator, passwordValidator, emailValidator, inputCheckErrorsMiddleware, authorizationController.registrationUser.bind(authorizationController) )
+authRouter.post('/registration-confirmation', requestLimitMiddleware, authorizationController.confirmationRegistration.bind(authorizationController))
+authRouter.post('/registration-email-resending', requestLimitMiddleware,emailValidator, inputCheckErrorsMiddleware, authorizationController.emailResending.bind(authorizationController) )

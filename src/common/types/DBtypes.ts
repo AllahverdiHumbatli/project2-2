@@ -54,8 +54,12 @@ export type FeedBackDBType = {
         userId: string,
         userLogin: string
     },
-    createdAt: string
-}
+    createdAt: string,
+    likesInfo: {
+        likesCount: number,
+        dislikesCount: number
+        myStatus: string
+}}
 export type ExpiredRefreshTokens = {
     refreshToken: string
 }

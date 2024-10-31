@@ -29,17 +29,41 @@ export const PostSchema = new mongoose.Schema<PostDBType>({
 })
 export const PostModel = mongoose.model<PostDBType>('posts', PostSchema)
 // FeedBackDBType
+
+
 export const CommentatorInfoSchema = new mongoose.Schema<CommentatorInfoType>({
     userId: { type: String, require: true },
     userLogin: { type: String, require: true }
+})
+const likesInfoSchema = new mongoose.Schema({
+    likesCount: { type: Number, require: true },
+    dislikesCount: { type: Number, require: true },
+    myStatus: {
+    type: String,
+    enum: ['None', 'Like', 'Dislike'],
+     default: 'None'
+},
 })
 export const CommentsSchema = new mongoose.Schema<FeedBackDBType>({
     postID: { type: String, require: true },
     content: { type: String, require: true },
     commentatorInfo: { type: CommentatorInfoSchema, require: true },
-    createdAt: { type: String, require: true }
+    createdAt: { type: String, require: true },
+    likesInfo: { type: likesInfoSchema, require: true },
 })
 export const CommentsModel = mongoose.model<FeedBackDBType>('comments', CommentsSchema)
+
+export const LikesForCommentsSchema = new mongoose.Schema({
+    status: {
+    type: String,
+    enum: ['None', 'Like', 'Dislike'],
+    },
+    userId: { type: String, require: true },
+    commentId: { type: String, require: true },
+})
+export const LikesForCommentsModel = mongoose.model('likesForComments', LikesForCommentsSchema)
+
+
 
 export const EmailConfirmationSchema = new mongoose.Schema<EmailConfirmation>({
     confirmationCode: { type: String, require: true },

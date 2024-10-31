@@ -7,9 +7,10 @@ import {inputCheckErrorsMiddleware} from "../common/global-middlewares/globalMid
 import {emailValidator} from "../features/users/api/middlewares/emailValidator";
 import {getUsers} from "../features/users/api/contollers/getController";
 import {deleteUserById} from "../features/users/api/contollers/deleteByIdController";
+import {usersController} from "../features/users/api/contollers/usersController";
 
 export const usersRouter = Router()
 
-usersRouter.get('/', adminMiddleWare, getUsers )
-usersRouter.post('/',adminMiddleWare, loginValidator, passwordValidator, emailValidator, inputCheckErrorsMiddleware, postUser )
-usersRouter.delete('/:id', adminMiddleWare, deleteUserById)
+usersRouter.get('/', adminMiddleWare, usersController.getUsers.bind(usersController) )
+usersRouter.post('/',adminMiddleWare, loginValidator, passwordValidator, emailValidator, inputCheckErrorsMiddleware, usersController.createUser.bind(usersController) )
+usersRouter.delete('/:id', adminMiddleWare, usersController.deleteUserById.bind(usersController))

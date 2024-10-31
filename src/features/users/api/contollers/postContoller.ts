@@ -1,6 +1,5 @@
 import {usersService} from "../../domain/users-service";
 import {Request, Response} from 'express'
-import {postsService} from "../../../posts/domain/posts-service";
 import {usersQueryRepositories} from "../user-query-repository";
 import {UserViewModel, ValidationErrorForLoginEmail} from "../view-models/UserViewModels";
 
