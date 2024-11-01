@@ -40,7 +40,6 @@ export class PostsQueryRepository {
     }
     async getPostById(id: string):Promise<PostViewModel> {
         const res = await PostModel.findOne({_id: new ObjectId(id)})
-        console.log("рес из монго", res)
         if (res) {
             return {
                 id: res._id.toString(), // Преобразование ObjectId в строку

@@ -38,34 +38,66 @@ export class CommentsQueryRepository{
 
 
     }
-    async getCommentsForPost(sanitizedQuery: CommentsQueryViewModel, postId: string) {
+    async getCommentsForPost(sanitizedQuery: CommentsQueryViewModel, postId: string, userId: string | null) {
         try {
             const sortDirection = sanitizedQuery.sortDirection === 'asc' ? 1 : -1;
             // собственно запрос в бд (может быть вынесено во вспомогательный метод)
-            const items  = await CommentsModel
+            const comments  = await CommentsModel
                 .find({postID: postId})
                 .sort({ [sanitizedQuery.sortBy]: sortDirection }) //сюда передаются строки
                 .skip((sanitizedQuery.pageNumber - 1) * sanitizedQuery.pageSize)
                 .limit(sanitizedQuery.pageSize)
-                .lean() as any[] /*SomePostType[]*/
+                .lean() /*SomePostType[]*/
+console.log("comments", comments)
+            const commentsWithStatuses =  await Promise.all(
+                comments.map(async (comment) => {
+                    const likeStatus: string = userId
+                        ? ( await LikesForCommentsModel.findOne({userId, commentId: comment._id.toString()}))?.status ?? "None"
+                        : "None";
+
+                    return ({
+                        id: comment._id.toString(),
+                        content: comment.content,
+                        commentatorInfo: {
+                            userId: comment.commentatorInfo.userId,
+                            userLogin: comment.commentatorInfo.userLogin,
+                        },
+                        createdAt: comment.createdAt,
+                        likesInfo: {
+                            likesCount: comment.likesInfo.likesCount,
+                            dislikesCount:comment.likesInfo.dislikesCount,
+                            myStatus: likeStatus
+
+                        }
+                    })
+                })
+            )
 
             const totalCount = await CommentsModel.countDocuments({postID: postId})
+            console.log('commentsWithStatuses', commentsWithStatuses)
 
-            return {
+            const result = {
                 pagesCount: Math.ceil(totalCount / sanitizedQuery.pageSize),
                 page: sanitizedQuery.pageNumber,
                 pageSize: sanitizedQuery.pageSize,
                 totalCount: totalCount,
-                items: items.map(comment => ({
-                    id: comment._id.toString(),
+                items: commentsWithStatuses.map(comment => ({
+                    id: comment.id.toString(),
                     content: comment.content,
                     commentatorInfo: {
                         userId: comment.commentatorInfo.userId,
                         userLogin: comment.commentatorInfo.userLogin,
                     },
-                    createdAt: comment.createdAt
+                    createdAt: comment.createdAt,
+                    likesInfo: {
+                        likesCount: comment.likesInfo.likesCount,
+                        dislikesCount: comment.likesInfo.likesCount,
+                        myStatus: comment.likesInfo.myStatus
+                    }
                 }))
             }
+            console.log("result", result)
+            return result
         } catch (e) {
             console.log(e)
             return {error: 'some error'}

@@ -9,6 +9,7 @@ import {authMiddleware} from "../common/global-middlewares/authMiddleWare";
 import {contentValidatorForComment} from "../features/comments/api/middlewares/contentValidator";
 import {postsController} from "../features/posts/api/controllers/postsController";
 import {authMiddleWareForAccesToken} from "../common/global-middlewares/authMiddleWareForAccesToken";
+import {authMiddleWareForLikesMonitoring} from "../common/global-middlewares/authMiddleWareForLikesMonitoring";
 
 export const postsRouter = Router()
 
@@ -18,4 +19,4 @@ postsRouter.get("/:id", postsController.getPostById.bind(postsController) )
 postsRouter.put("/:id", adminMiddleWare, titleValidator, shortDescriptionValidator, contentValidator, blogIdValidator, inputCheckErrorsMiddleware, postsController.updatePostById.bind(postsController) )
 postsRouter.delete("/:id",adminMiddleWare,  postsController.deletePostById.bind(postsController))
 postsRouter.post('/:id/comments', authMiddleWareForAccesToken /* тут стоял authmiddlaware*/, contentValidatorForComment, inputCheckErrorsMiddleware, postsController.createComment.bind(postsController) )
-postsRouter.get("/:id/comments", postsController.getPostComments.bind(postsController))
+postsRouter.get("/:id/comments", authMiddleWareForLikesMonitoring, postsController.getPostComments.bind(postsController))

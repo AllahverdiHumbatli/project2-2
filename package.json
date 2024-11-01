@@ -42,7 +42,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "dev": "nodemon --inspect dist/src/index.js",
-    "jest": "jest -i",
+    "jest:e2e": "jest -i --detectOpenHandles",
     "jest:coverage": "jest -i --coverage",
     "localhost:run": "ssh -R 80:localhost:5000 nokey@localhost.run",
     "serveo": "ssh -R 80:localhost:5000 serveo.net"

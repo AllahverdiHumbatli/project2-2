@@ -1,24 +1,33 @@
-import request from 'supertest';
+import  request from 'supertest';
 import {db} from "../src/common/db/mongo-db";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {initApp} from "../src/app";
-import {Express} from "express";
+import express, {Express} from "express";
+import {SETTINGS} from "../src/settings";
+import {runDb} from "../src/common/db/mongoose/mongooseDb";
 
 let app: Express
 let blog
 
 describe('/videos', () => {
     beforeAll(async () => {
+        //jest.setTimeout(200000);
         app = initApp()
-        const mongoServer = await MongoMemoryServer.create()
-        await db.run(mongoServer.getUri())
-        await request(app).delete('/testing/all-data').expect(204)
-    })
+        //const app = express()
+        // console.log('app', app)
+        app.set('trust proxy', true);
+        // await db.run(SETTINGS.MONGO_URL)
+        await runDb()
 
-    afterAll(async () => {
-        await db.drop()
-        await db.stop()
-    })
+        console.log(1)
+         await request(app).delete('/testing/all-data')
+        console.log(2)
+        })
+
+    // afterAll(async () => {
+    //     await db.drop()
+    //     await db.stop()
+    // })
     const newBlogForCreate = {
         name: 'alik',
         description: 'alik',
@@ -30,7 +39,7 @@ describe('/videos', () => {
         websiteUrl: 'https://chatgpt.com/'
     }
     it('GET blogs = []', async () => {
-        await request(app).get('/blogs/').expect(200, {pagesCount: 0, page: 1, pageSize: 10, totalCount: 0, items: []})
+        await request(app).get('/blogs').expect(200, {pagesCount: 0, page: 1, pageSize: 10, totalCount: 0, items: []})
     })
     it('does not create new blog', async () => {
         await request(app).post('/blogs').auth("admin", "qwerty")
@@ -72,3 +81,4 @@ describe('/videos', () => {
     })
     
 })
+

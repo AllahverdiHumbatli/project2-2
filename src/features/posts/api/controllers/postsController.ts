@@ -130,8 +130,12 @@ export class PostsController {
             return
         }
 
+
+
         const sanitizedQuery = this.helper(req.query as {[key: string]: string| undefined})
-        const allCommentsForPost =  await new CommentsQueryRepository().getCommentsForPost(sanitizedQuery, req.params.id) //вопрос
+        const allCommentsForPost =  await new CommentsQueryRepository()
+            .getCommentsForPost(sanitizedQuery, req.params.id, req.user?.id ?? null)
+        console.log("res from contoller", allCommentsForPost)//вопрос
         res.status(200).send(allCommentsForPost)
         return
     };

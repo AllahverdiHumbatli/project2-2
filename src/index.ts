@@ -5,7 +5,7 @@ import {initApp} from "./app";
 import {runDb} from "./common/db/mongoose/mongooseDb";
 
 
-const startApp = async () => {
+export const startApp = async () => {
     const app = initApp()
     app.set('trust proxy', true);
     await db.run(SETTINGS.MONGO_URL)

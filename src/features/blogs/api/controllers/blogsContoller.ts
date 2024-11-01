@@ -31,6 +31,7 @@ export class BlogsController {
 }
 }
     async getAllBlogs (req: Request, res: Response<any>)   {
+        console.log('get all blogs')
         const sanitizedQuery = this.helperForBlogPagination(req.query as {[key: string]: string| undefined})
         const allBlogs = await this.blogsQueryRepository.getBlogs(sanitizedQuery)
         res.status(200).send(allBlogs)
