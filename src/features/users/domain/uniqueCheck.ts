@@ -1,5 +1,4 @@
 import {ValidationErrorForLoginEmail} from "../api/view-models/UserViewModels";
-import {db} from "../../../common/db/mongo-db";
 import {UsersModel} from "../../../common/db/mongoose/mongooseSchemas";
 
 export async function isDataUnique(login: string, email: string):Promise<string|ValidationErrorForLoginEmail> {

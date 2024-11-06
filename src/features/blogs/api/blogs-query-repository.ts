@@ -1,6 +1,5 @@
-import { db} from "../../../common/db/mongo-db";
-import {ObjectId, OptionalId} from "mongodb";
-import {BlogsViewModel, BlogViewModel, BlogsQueryViewModel} from "./view-models/blogsViewModels";
+import {ObjectId} from "mongodb";
+import {BlogsQueryViewModel, BlogsViewModel, BlogViewModel} from "./view-models/blogsViewModels";
 import {BlogModel} from "../../../common/db/mongoose/mongooseSchemas";
 
 
@@ -55,7 +54,6 @@ export class BlogsQueryRepositories {
     async getById(id: string) :Promise <BlogViewModel>{
         // return db.blogs.find(blog => blog.id === id)
         const res = await BlogModel.findOne({_id: new ObjectId(id)})
-        console.log("res from getById " + res)
         if(res){
             return {
                 id: res._id.toString(),

@@ -5,7 +5,6 @@ import {contentValidator} from "../features/posts/api/middlewares/contentValidat
 import {blogIdValidator} from "../features/posts/api/middlewares/blogIdValidator";
 import {inputCheckErrorsMiddleware} from "../common/global-middlewares/globalMiddleWare";
 import {adminMiddleWare} from "../common/global-middlewares/adminMiddleWare";
-import {authMiddleware} from "../common/global-middlewares/authMiddleWare";
 import {contentValidatorForComment} from "../features/comments/api/middlewares/contentValidator";
 import {postsController} from "../features/posts/api/controllers/postsController";
 import {authMiddleWareForAccesToken} from "../common/global-middlewares/authMiddleWareForAccesToken";

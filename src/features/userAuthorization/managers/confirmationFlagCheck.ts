@@ -1,5 +1,3 @@
-import {db} from "../../../common/db/mongo-db";
-import { ObjectId } from 'mongodb';
 import {usersDbRepository} from "../../users/infrastructure/users-db-repository";
 import {UserDBType} from "../../../common/types/DBtypes";
 import {WithId } from 'mongodb'

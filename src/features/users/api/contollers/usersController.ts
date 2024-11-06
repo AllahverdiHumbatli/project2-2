@@ -14,7 +14,6 @@ class UserController {
 
     async createUser(req: Request, res: Response) {
         const isConfirmed = true
-        console.log(req.body.email)
         const newUserId:string|ValidationErrorForLoginEmail = await this.usersService.createUser({
             login:req.body.login,
             password:req.body.password,

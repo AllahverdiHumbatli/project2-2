@@ -1,4 +1,3 @@
-import {db} from "../../../common/db/mongo-db";
 import {ObjectId, WithId } from "mongodb";
 import {UserDBType} from "../../../common/types/DBtypes";
 import {CurrentUserViewModel, UsersQueryViewModel, UsersViewModel, UserViewModel} from "./view-models/UserViewModels";

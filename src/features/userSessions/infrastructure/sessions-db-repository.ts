@@ -1,7 +1,6 @@
 import {deleteSessionByDeviceId} from "../api/controllers/deleteSessionByDeviceId";
-import {db} from "../../../common/db/mongo-db";
 import {deleteAllSessionsExcludeCurrent} from "../api/controllers/deleteAllSessionExcludeCurrent";
-import {UsersSessionsModel} from "../../../common/db/mongoose/mongooseSchemas";
+import {BlogModel, UsersSessionsModel} from "../../../common/db/mongoose/mongooseSchemas";
 
 export class SessionDBRepo {
     async deleteSessionByDeviceId(deviceId: string){
@@ -13,6 +12,9 @@ export class SessionDBRepo {
         await UsersSessionsModel.deleteMany({
             device_id: { $ne: currentDeviceId }
         })
+    }
+    async deleteAllData(){
+        return await UsersSessionsModel.deleteMany({})
     }
 }
 export const sessionDBRepo = {

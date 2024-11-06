@@ -1,6 +1,5 @@
 import {body} from "express-validator"
 import {UsersDbRepository, usersDbRepository} from "../infrastructure/users-db-repository";
-import {db} from "../../../common/db/mongo-db";
 import * as bcrypt from 'bcrypt'
 import {WithId, ObjectId } from 'mongodb';
 import {ValidationErrorForLoginEmail} from "../api/view-models/UserViewModels";

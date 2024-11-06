@@ -1,6 +1,5 @@
 import {Request, Response} from "express";
 import {jwtService} from "../../../../common/application/jwt-service";
-import {db} from "../../../../common/db/mongo-db";
 import {authService} from "../../../userAuthorization/domain/auth-service";
 import {sessionsService} from "../../domain/sessions-service";
 

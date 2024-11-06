@@ -1,7 +1,4 @@
 import {Request, Response} from "express";
-import {db} from "../../../../common/db/mongo-db";
-import {ExpiredRefreshTokens} from "../../../../common/types/DBtypes";
-import jwt from "jsonwebtoken";
 import {jwtService} from "../../../../common/application/jwt-service";
 import {authService} from "../../domain/auth-service";
 import {UsersSessionsModel} from "../../../../common/db/mongoose/mongooseSchemas";

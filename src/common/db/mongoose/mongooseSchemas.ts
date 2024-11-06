@@ -98,3 +98,12 @@ export const UserSessionsSchema = new mongoose.Schema<SessionDBType>({
 
 export const UsersSessionsModel = mongoose.model<SessionDBType>('sessions', UserSessionsSchema)
 
+const DataForRateLimit = new mongoose.Schema({
+
+    ip: { type: String, require: true },
+    url: { type: String, require: true },
+    date: { type: Date, require: true },
+    }
+
+)
+export const RateLimitModel = mongoose.model<SessionDBType>('rateLimitData', DataForRateLimit)

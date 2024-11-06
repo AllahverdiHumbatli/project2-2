@@ -1,21 +1,17 @@
-import {ValidationErrorForLoginEmail} from "../../users/api/view-models/UserViewModels";
-import {isDataUnique} from "../../users/domain/uniqueCheck";
 import * as bcrypt from "bcrypt";
 import {usersDbRepository} from "../../users/infrastructure/users-db-repository";
 import {usersService} from "../../users/domain/users-service";
-import { emailAdapter} from "../adapters/email-adapter";
+import {emailAdapter} from "../adapters/email-adapter";
 import {confirmationCodeAndDateCheck} from "../managers/confirmationCodeAndDateCheck";
-import {db} from "../../../common/db/mongo-db";
 import {confirmationFlagCheck} from "../managers/confirmationFlagCheck";
-import {StatusCode} from "../../comments/domain/comments-service";
+import {Result, StatusCode} from "../../comments/domain/comments-service";
 import {randomUUID} from "node:crypto";
-import {Result} from "../../comments/domain/comments-service";
 import {WithId} from "mongodb";
 import {SessionDBType, UserDBType} from "../../../common/types/DBtypes";
 import {jwtService} from "../../../common/application/jwt-service";
-import jwt from "jsonwebtoken";
 import {JwtPayload} from "jwt-decode";
-import {UsersModel, UsersSessionsModel} from "../../../common/db/mongoose/mongooseSchemas";
+import {UsersSessionsModel} from "../../../common/db/mongoose/mongooseSchemas";
+
 // "../domain/comments-service";
 export class AuthorizationService {
     async registerUser(login: string, password: string, email: string, isConfirmed: boolean): Promise<any> {

@@ -1,11 +1,7 @@
-
-import {CommentsDbRepository, commentsDbRepository} from "../infrastructure/comments-db-repository";
-
-import {db} from "../../../common/db/mongo-db";
+import {CommentsDbRepository} from "../infrastructure/comments-db-repository";
 import {FeedBackDBType} from "../../../common/types/DBtypes";
-import {CommentViewType} from "../api/view-models/commentViewType";
-import {CommentsQueryRepository} from "../api/comments-query-repository";
 import {LikeCountCalculator} from "./like-count-calculator";
+
 export enum StatusCode {
     Success = 0,
     NotFound = 1,

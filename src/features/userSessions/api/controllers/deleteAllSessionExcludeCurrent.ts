@@ -1,6 +1,5 @@
 import {Request, Response} from "express";
 import {jwtService} from "../../../../common/application/jwt-service";
-import {db} from "../../../../common/db/mongo-db";
 import {sessionsService} from "../../domain/sessions-service";
 import {JwtPayload} from "jwt-decode";
 

@@ -1,7 +1,7 @@
-import {Response, Request, NextFunction} from 'express'
+import {NextFunction, Request, Response} from 'express'
 import {jwtService} from "../application/jwt-service";
 import {usersQueryRepositories} from "../../features/users/api/user-query-repository";
-import {db} from "../db/mongo-db";
+
 export const
     authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     // if (!req.headers['authorization']) {

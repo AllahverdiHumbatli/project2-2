@@ -1,9 +1,5 @@
-
 import {jwtService} from "../../../../common/application/jwt-service";
 import {Request, Response} from "express";
-import jwt from "jsonwebtoken";
-import {db} from "../../../../common/db/mongo-db";
-import {ExpiredRefreshTokens} from "../../../../common/types/DBtypes";
 import {UsersSessionsModel} from "../../../../common/db/mongoose/mongooseSchemas";
 
 export const refreshTokens  = async (req: Request, res: Response) => {

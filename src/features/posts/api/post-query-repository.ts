@@ -1,7 +1,5 @@
-import {db} from "../../../common/db/mongo-db";
-import {ObjectId, OptionalId} from "mongodb";
-import {PostsViewModel, PostViewModel, PostsQueryViewModel, PostsForBlogViewModel} from "./view-models/postsViewModels";
-import {BlogsQueryViewModel} from "../../blogs/api/view-models/blogsViewModels";
+import {ObjectId} from "mongodb";
+import {PostsForBlogViewModel, PostsQueryViewModel, PostsViewModel, PostViewModel} from "./view-models/postsViewModels";
 import {PostModel} from "../../../common/db/mongoose/mongooseSchemas";
 
 export class PostsQueryRepository {

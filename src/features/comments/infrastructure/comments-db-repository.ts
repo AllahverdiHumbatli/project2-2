@@ -1,10 +1,6 @@
-
-import {db} from "../../../common/db/mongo-db";
-import {ObjectId, OptionalId} from "mongodb";
+import {ObjectId} from "mongodb";
 import {FeedBackDBType} from "../../../common/types/DBtypes";
 import {CommentsModel, LikesForCommentsModel} from "../../../common/db/mongoose/mongooseSchemas";
-import {Result} from "../domain/comments-service";
-import {CommentViewType} from "../api/view-models/commentViewType";
 
 export class CommentsDbRepository {
     async postComment(commentEntity: FeedBackDBType){
@@ -71,6 +67,9 @@ export class CommentsDbRepository {
         const likeEntity = await LikesForCommentsModel.findOne({commentId,userId })
         console.log('likeEntity', likeEntity)
         return likeEntity ? likeEntity.status : 'None';
+    }
+    async deleteAllData(){
+        return await CommentsModel.deleteMany({})
     }
 }
 

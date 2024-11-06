@@ -1,5 +1,4 @@
 import  request from 'supertest';
-import {db} from "../src/common/db/mongo-db";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {initApp} from "../src/app";
 import express, {Express} from "express";
@@ -11,17 +10,14 @@ let blog
 
 describe('/videos', () => {
     beforeAll(async () => {
-        //jest.setTimeout(200000);
+        jest.setTimeout(30000);
         app = initApp()
         //const app = express()
         // console.log('app', app)
         app.set('trust proxy', true);
         // await db.run(SETTINGS.MONGO_URL)
         await runDb()
-
-        console.log(1)
-         await request(app).delete('/testing/all-data')
-        console.log(2)
+        await request(app).delete('/testing/all-data').expect(204)
         })
 
     // afterAll(async () => {

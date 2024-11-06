@@ -1,4 +1,3 @@
-import {db} from "../../../common/db/mongo-db";
 import {UsersSessionsModel} from "../../../common/db/mongoose/mongooseSchemas";
 
 export class SessionsQueryRepo {

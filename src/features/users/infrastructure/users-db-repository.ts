@@ -1,7 +1,7 @@
 import {randomUUID} from "node:crypto";import {ObjectId} from "mongodb";
 import {UserDBType} from "../../../common/types/DBtypes";
 import {WithId } from 'mongodb'
-import {UsersModel, UsersSessionsModel} from "../../../common/db/mongoose/mongooseSchemas";
+import {BlogModel, UsersModel, UsersSessionsModel} from "../../../common/db/mongoose/mongooseSchemas";
 import {add} from "date-fns";
 
 export class UsersDbRepository {
@@ -62,6 +62,9 @@ export class UsersDbRepository {
         await UsersModel.updateOne({_id: new ObjectId(userId)}, {$set: {'passwordHash': newPasswordHash}});
         await UsersModel.updateOne({_id: new ObjectId(userId)}, {$set: {'passwordRecovery.passwordRecoveryCode': null}})
 
+    }
+    async deleteAllData(){
+        return await UsersModel.deleteMany({})
     }
 }
 

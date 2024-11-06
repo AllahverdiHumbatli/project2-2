@@ -1,14 +1,9 @@
-import {db} from "../../../common/db/mongo-db";
-import {ObjectId, OptionalId} from "mongodb";
+import {ObjectId} from "mongodb";
 import {CommentViewType} from "./view-models/commentViewType";
-import {Result} from "../domain/comments-service";
-import {StatusCode} from "../domain/comments-service";
+import {Result, StatusCode} from "../domain/comments-service";
 import {CommentsQueryViewModel} from "../view-models/commentsViewModels";
-import {
-    CommentsModel,
-    LikesForCommentsModel,
-    LikesForCommentsSchema
-} from "../../../common/db/mongoose/mongooseSchemas";
+import {CommentsModel, LikesForCommentsModel} from "../../../common/db/mongoose/mongooseSchemas";
+
 export class CommentsQueryRepository{
     async getCommentById(commentId: string, userId?: string):Promise<Result<CommentViewType>> {
         const currentUserLike  = await LikesForCommentsModel.findOne({commentId,userId })
@@ -48,7 +43,6 @@ export class CommentsQueryRepository{
                 .skip((sanitizedQuery.pageNumber - 1) * sanitizedQuery.pageSize)
                 .limit(sanitizedQuery.pageSize)
                 .lean() /*SomePostType[]*/
-console.log("comments", comments)
             const commentsWithStatuses =  await Promise.all(
                 comments.map(async (comment) => {
                     const likeStatus: string = userId
@@ -74,7 +68,7 @@ console.log("comments", comments)
             )
 
             const totalCount = await CommentsModel.countDocuments({postID: postId})
-            console.log('commentsWithStatuses', commentsWithStatuses)
+
 
             const result = {
                 pagesCount: Math.ceil(totalCount / sanitizedQuery.pageSize),
@@ -91,12 +85,12 @@ console.log("comments", comments)
                     createdAt: comment.createdAt,
                     likesInfo: {
                         likesCount: comment.likesInfo.likesCount,
-                        dislikesCount: comment.likesInfo.likesCount,
+                        dislikesCount: comment.likesInfo.dislikesCount,
                         myStatus: comment.likesInfo.myStatus
                     }
                 }))
             }
-            console.log("result", result)
+
             return result
         } catch (e) {
             console.log(e)

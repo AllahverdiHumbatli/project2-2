@@ -1,7 +1,5 @@
-
-import {ObjectId, OptionalId} from "mongodb";
+import {ObjectId} from "mongodb";
 import {PostDBType} from "../../../common/types/DBtypes";
-import {db} from "../../../common/db/mongo-db";
 import {PostModel} from "../../../common/db/mongoose/mongooseSchemas";
 
 
@@ -36,6 +34,9 @@ export class PostDbRepository {
             return true
         }
         return false
+    }
+    async deleteAllData(){
+        return await PostModel.deleteMany({})
     }
 
 }

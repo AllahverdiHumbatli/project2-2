@@ -22,6 +22,9 @@ export class BlogsDbRepository {
         if(result.deletedCount === 1 ){ return true }
         return false
     }
+    async deleteAllData(){
+       return await BlogModel.deleteMany({})
+    }
 
 }
 // export const blogsRepositories = new BlogsDbRepository()

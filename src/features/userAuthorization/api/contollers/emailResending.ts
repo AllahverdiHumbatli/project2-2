@@ -1,8 +1,5 @@
 import {Request, Response} from "express";
 import {authService} from "../../domain/auth-service";
-import {db} from "../../../../common/db/mongo-db";
-import {confirmationFlagCheck} from "../../managers/confirmationFlagCheck";
-import {randomUUID} from "node:crypto";
 import {StatusCode} from "../../../comments/domain/comments-service";
 
 // export const emailResending =  async (req: Request, res: Response) => {

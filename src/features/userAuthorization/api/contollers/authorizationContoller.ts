@@ -36,7 +36,6 @@ class AuthorizationController {
                 ]
             });
         }
-
         const user:WithId<UserDBType> | null = await (new UserService()).checkCredentials(req.body.loginOrEmail, req.body.password);
 
         if(user) {
